@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReviewServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">E-Commerce</a> &gt; <a href="index.source.html" class="el_package">com.hcl.ecommerce.service</a> &gt; <span class="el_source">ReviewServiceImpl.java</span></div><h1>ReviewServiceImpl.java</h1><pre class="source lang-java linenums">package com.hcl.ecommerce.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.hcl.ecommerce.dto.ReviewDto;
+import com.hcl.ecommerce.entity.Review;
+import com.hcl.ecommerce.repository.ReviewRepository;
+import com.hcl.ecommerce.repository.StoreRepository;
+import com.hcl.ecommerce.repository.UserRepository;
+
+/**
+ * This class contains one method
+ * @author Vishalakshi
+ *
+ */
+@Service
+<span class="fc" id="L18">public class ReviewServiceImpl implements ReviewService {</span>
+
+	@Autowired
+	private ReviewRepository reviewRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private StoreRepository storeRepository;
+
+	/**
+	 * This method add review values to the review table
+	 */
+	@Override
+	public String addReview(ReviewDto reviewRequestDto) {
+<span class="fc" id="L34">		Review review = new Review();</span>
+<span class="fc" id="L35">		Integer userId = reviewRequestDto.getUserId();</span>
+<span class="fc" id="L36">		Integer storeId = reviewRequestDto.getStoreId();</span>
+
+<span class="fc bfc" id="L38" title="All 2 branches covered.">		if (userRepository.existsByUserId(userId)) {</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">			if (storeRepository.existsByStoreId(storeId)) {</span>
+<span class="fc" id="L40">				review.setUserId(userId);</span>
+<span class="fc" id="L41">				review.setStoreId(storeId);</span>
+<span class="fc" id="L42">				review.setRating(reviewRequestDto.getRating());</span>
+			} else {
+<span class="fc" id="L44">				return &quot;StoreId not found&quot;;</span>
+			}
+		} else {
+<span class="fc" id="L47">			return &quot;UserId not found&quot;;</span>
+		}
+
+<span class="fc" id="L50">		reviewRepository.save(review);</span>
+<span class="fc" id="L51">		return &quot;Review added successfully&quot;;</span>
+
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

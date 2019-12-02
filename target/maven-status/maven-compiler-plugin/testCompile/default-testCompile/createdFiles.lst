@@ -1,0 +1,8 @@
+com\hcl\ecommerce\controller\ProductControllerTest.class
+com\hcl\ecommerce\service\ReviewServiceTest.class
+com\hcl\ecommerce\service\ProductServiceTest.class
+com\hcl\ecommerce\service\StoreProductServiceTest.class
+com\hcl\ecommerce\controller\ReviewControllerTest.class
+com\hcl\ecommerce\controller\StoreControllerTest.class
+com\hcl\ecommerce\controller\StoreProductControllerTest.class
+com\hcl\ecommerce\service\StoreServiceTest.class

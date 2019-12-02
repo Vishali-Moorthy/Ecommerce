@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StoreProductServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">E-Commerce</a> &gt; <a href="index.source.html" class="el_package">com.hcl.ecommerce.service</a> &gt; <span class="el_source">StoreProductServiceImpl.java</span></div><h1>StoreProductServiceImpl.java</h1><pre class="source lang-java linenums">package com.hcl.ecommerce.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.hcl.ecommerce.dto.StoreProductDto;
+import com.hcl.ecommerce.entity.Product;
+import com.hcl.ecommerce.entity.StoreProduct;
+import com.hcl.ecommerce.repository.ProductRepository;
+import com.hcl.ecommerce.repository.ReviewRepository;
+import com.hcl.ecommerce.repository.StoreProductRepository;
+
+/**
+ * This class contains two methods
+ * @author Vishalakshi
+ *
+ */
+@Service
+<span class="fc" id="L22">public class StoreProductServiceImpl implements StoreProductService{</span>
+	
+	@Autowired
+	private StoreProductRepository storeProductRepository;
+	
+	@Autowired
+	private ProductRepository productRepository;
+	
+	@Autowired
+	private ReviewRepository reviewRepository;
+
+	/**
+	 * Add storeProduct method add store and product values into the storeproduct table
+	 */
+	@Override
+	public String addStoreProduct(StoreProductDto storeProductRequestDto) {
+<span class="fc" id="L38">		StoreProduct storeProduct = new StoreProduct();</span>
+<span class="fc" id="L39">		storeProduct.setStoreId(storeProductRequestDto.getStoreId());</span>
+<span class="fc" id="L40">		Integer productId = storeProductRequestDto.getProductId();</span>
+<span class="fc" id="L41">		storeProduct.setProductId(productId );</span>
+<span class="fc" id="L42">		Integer discountPrice = storeProductRequestDto.getDiscount();</span>
+<span class="fc" id="L43">		storeProduct.setDiscount(discountPrice );</span>
+<span class="fc" id="L44">		Product product = productRepository.findByProductId(productId);</span>
+<span class="fc" id="L45">		Double price = product.getPrice();</span>
+<span class="fc" id="L46">		Double discount = (discountPrice * price) / 100;</span>
+<span class="fc" id="L47">		Double finalPrice = price - discount;</span>
+<span class="fc" id="L48">		storeProduct.setFinalPrice(finalPrice);</span>
+<span class="fc" id="L49">		storeProductRepository.save(storeProduct);</span>
+<span class="fc" id="L50">		return &quot;Store and Product added successfully&quot;;</span>
+	}
+
+	/**
+	 * This method search the product from the storeproduct table with the given productId
+	 * Return the ratings of the stores for yhe given productId
+	 */
+	@Override
+	public List&lt;StoreProductDto&gt; searchProductById(Integer productId) {
+<span class="fc" id="L59">		List&lt;StoreProduct&gt; storeProducts = storeProductRepository.findByProductId(productId);</span>
+<span class="fc" id="L60">		List&lt;StoreProductDto&gt; storeProductDto = new ArrayList&lt;&gt;(); </span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">		for (StoreProduct storeProduct : storeProducts) {</span>
+<span class="fc" id="L62">			StoreProductDto storeProductDtos = new StoreProductDto();</span>
+<span class="fc" id="L63">			storeProductDtos.setFinalPrice(storeProduct.getFinalPrice());</span>
+<span class="fc" id="L64">			storeProductDtos.setProductId(productId);</span>
+<span class="fc" id="L65">			storeProductDtos.setStoreId(storeProduct.getStoreId());</span>
+<span class="fc" id="L66">			storeProductDtos.setDiscount(storeProduct.getDiscount());</span>
+<span class="fc" id="L67">			storeProductDtos.setRating(reviewRepository.findByStoreId(storeProduct.getStoreId()));</span>
+<span class="fc" id="L68">			storeProductDto.add(storeProductDtos);</span>
+<span class="fc" id="L69">		}</span>
+<span class="fc" id="L70">		return storeProductDto;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>
